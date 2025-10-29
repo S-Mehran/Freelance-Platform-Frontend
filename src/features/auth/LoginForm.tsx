@@ -1,32 +1,52 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Card, Form, Button, Alert } from "react-bootstrap";
 import CustomInput from "@components/CustomInput";
 import { RoutePath } from "@/routes/routes";
+import { Route, useNavigate } from "react-router";
+import useAxios from "@/hooks/useAxios";
 
 const LoginForm = () => {
   const [form, setForm] = useState({ name: "", email: "", password: "" });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
+  const navigate = useNavigate()
+
+  const {fetchData, response} = useAxios()
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     console.log(e.target.value);
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  useEffect(()=> {
+    if (response) {
+      console.log(response)
+      navigate(RoutePath.HOME)
+    }
+
+  }, [navigate, response])
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!form.name || !form.email || !form.password) {
+    if (!form.email || !form.password) {
       setError("All fields are required.");
       setSuccess("");
       return;
     }
+    await fetchData({url: "/login", method: "POST", data: {email: form.email, password: form.password}})
 
     // Simulate API call
-    setTimeout(() => {
-      setError("");
-      setSuccess("Account created successfully!");
-    }, 1000);
+    // setTimeout(() => {
+    //   setError("");
+    //   setSuccess("Logging In!");
+    //   //navigate(RoutePath.HOME)
+    // }, 1000);
+    // setTimeout(()=> {
+    //   navigate(RoutePath.HOME)
+    // }, 2000)
+
   };
   return (
     <Card className="shadow-sm p-4">
@@ -53,7 +73,12 @@ const LoginForm = () => {
             onChange={handleChange}
             value={form.password}
           />
-
+        {/* <p className="text-center mt-3 mb-0">
+          Forgot Password?{" "} */}
+          <a href={RoutePath.ENTER_EMAIL} className="text-decoration-none">
+            Forgot Password
+          </a>
+        {/* </p> */}
           <div className="d-grid">
             <Button variant="primary" type="submit">
               Login

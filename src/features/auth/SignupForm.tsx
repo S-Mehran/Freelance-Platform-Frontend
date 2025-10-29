@@ -1,4 +1,4 @@
-import { Card, Form, Button, Alert } from "react-bootstrap";
+import { Card, Form, Button} from "react-bootstrap";
 import CustomInput from "@components/CustomInput";
 import { RoutePath } from "@/routes/routes";
 import { useFormik } from "formik";
@@ -9,11 +9,11 @@ import { useNavigate } from "react-router";
 const SignupForm = () => {
   const navigate = useNavigate();
 
-  const { response, error, loading, fetchData } = useAxios();
+  const { response, error, fetchData } = useAxios();
 
   console.log("Response:", response);
   if (response) {
-    navigate(RoutePath.AUTH + "/" + RoutePath.LOGIN);
+    navigate(RoutePath.HOME+RoutePath.AUTH + "/" + RoutePath.OTP, {state: {user: response}});
   } else {
     console.log(error);
   }
@@ -35,12 +35,14 @@ const SignupForm = () => {
       lastName: "",
       email: "",
       password: "",
+      role: "",
     },
     validationSchema,
     onSubmit: async (values) => {
       // alert(JSON.stringify(values, null, 2));
 
-      await fetchData({ url: "register", method: "post", data: values });
+      await fetchData({ url: "/register", method: "post", data: values });
+      // navigate(RoutePath.HOME + RoutePath.AUTH + "/" + RoutePath.OTP);
     },
   });
 
@@ -89,6 +91,16 @@ const SignupForm = () => {
             value={formik.values.password}
             isInvalid={!!formik.errors.password}
             validationMsg={formik.errors.password || ""}
+          />
+          <CustomInput
+          name="role"
+          label="Role"
+          placeholder="Select the User Role"
+          type="text"
+          onChange={formik.handleChange}
+          value={formik.values.role}
+          isInvalid={!!formik.errors.role}
+          validationMsg={formik.errors.role}
           />
 
           <div className="d-grid">

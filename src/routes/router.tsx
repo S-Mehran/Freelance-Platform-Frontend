@@ -1,10 +1,13 @@
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter, Route } from "react-router";
 
 import { AuthPage, App } from "@pages/index";
 
 import LoginForm from "@features/auth/LoginForm";
 import SignupForm from "@features/auth/SignupForm";
 import { RoutePath } from "./routes";
+import OtpForm from "@/features/auth/OtpScreen";
+import EnterEmailForm from "@/features/auth/EnterEmailForm";
+import ResetPasswordForm from "@/features/auth/ResetPasswordForm";
 
 const router = createBrowserRouter([
   {
@@ -18,6 +21,9 @@ const router = createBrowserRouter([
       { index: true, Component: LoginForm },
       { path: RoutePath.LOGIN, Component: LoginForm },
       { path: RoutePath.REGISTER, Component: SignupForm },
+      {path: RoutePath.OTP, Component: OtpForm},
+      {path: RoutePath.ENTER_EMAIL, Component: EnterEmailForm},
+      {path: RoutePath.RESET_PASSWORD, Component: ResetPasswordForm},
     ],
   },
 ]);
