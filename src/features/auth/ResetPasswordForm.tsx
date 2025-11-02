@@ -38,7 +38,7 @@ const ResetPasswordForm = () => {
         },
         validationSchema,
         onSubmit: async(values) => {
-            await fetchData({url: "/forgot-password", method: "POST", data: values})
+            await fetchData({url: "/reset-password", method: "POST", data: values})
         }
     })
     return (

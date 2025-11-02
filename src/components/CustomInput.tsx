@@ -7,6 +7,8 @@ type CustomInputProps = {
   placeholder?: string;
   type?: string;
   name: string;
+  as?:"input"|"textarea"|"select";
+  options?: {value: string; label: string}[]
   isInvalid?: boolean;
   validationMsg?: string;
 };
@@ -19,6 +21,8 @@ const CustomInput = (props: CustomInputProps) => {
     value,
     placeholder,
     onChange,
+    as="input",
+    options=[],
     isInvalid,
     validationMsg,
   } = props;
@@ -29,15 +33,33 @@ const CustomInput = (props: CustomInputProps) => {
 
   return (
     <Form.Group className="mb-3" controlId={name}>
-      <Form.Label>{label}</Form.Label>
-      <Form.Control
-        type={type}
-        name={name}
-        placeholder={placeholder}
-        value={value}
-        onChange={handleChange}
-        isInvalid={isInvalid}
-      />
+      {label && <Form.Label>{label}</Form.Label>}
+
+      {as === "select" ? (
+        <Form.Control
+          as="select"
+          name={name}
+          value={value}
+          onChange={handleChange}
+          isInvalid={isInvalid}
+        >
+          {options.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
+        </Form.Control>
+      ) : (
+        <Form.Control
+          as={as}
+          type={as === "input" ? type : undefined}
+          name={name}
+          placeholder={placeholder}
+          value={value}
+          onChange={handleChange}
+          isInvalid={isInvalid}
+        />
+      )}
       <Form.Control.Feedback type="invalid">
         {validationMsg}
       </Form.Control.Feedback>

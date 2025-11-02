@@ -12,11 +12,12 @@ type RequestData = {
 const useAxios = () => {
   const [response, setResponse] = useState(null);
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   // Create an Axios instance
   const axiosInstance = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL,
+    withCredentials: true,
   });
 
   // Set up request and response interceptors

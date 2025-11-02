@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Card, Form, Button, Alert } from "react-bootstrap";
 import CustomInput from "@components/CustomInput";
 import { RoutePath } from "@/routes/routes";
-import { Route, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import useAxios from "@/hooks/useAxios";
 
 const LoginForm = () => {
@@ -22,10 +22,11 @@ const LoginForm = () => {
   useEffect(()=> {
     if (response) {
       console.log(response)
-      navigate(RoutePath.HOME)
+      navigate(RoutePath.HOME+RoutePath.AUTH+"/"+RoutePath.CLIENT_HOME)
     }
 
   }, [navigate, response])
+
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -37,15 +38,15 @@ const LoginForm = () => {
     }
     await fetchData({url: "/login", method: "POST", data: {email: form.email, password: form.password}})
 
-    // Simulate API call
-    // setTimeout(() => {
-    //   setError("");
-    //   setSuccess("Logging In!");
-    //   //navigate(RoutePath.HOME)
-    // }, 1000);
-    // setTimeout(()=> {
-    //   navigate(RoutePath.HOME)
-    // }, 2000)
+   // Simulate API call
+    setTimeout(() => {
+      setError("");
+      setSuccess("Logging In!");
+      //navigate(RoutePath.HOME)
+    }, 1000);
+    setTimeout(()=> {
+      navigate(RoutePath.HOME+RoutePath.AUTH+"/"+RoutePath.CLIENT_HOME)
+    }, 2000)
 
   };
   return (

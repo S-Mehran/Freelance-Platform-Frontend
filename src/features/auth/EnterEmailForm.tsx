@@ -32,7 +32,7 @@ const EnterEmailForm = () => {
         },
         validationSchema,
         onSubmit: async(values) => {
-            await fetchData({url: "/verify", method: "POST", data: values})
+            await fetchData({url: "/send-otp", method: "POST", data: values})
         }
     })
     return(

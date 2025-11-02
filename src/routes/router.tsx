@@ -1,4 +1,4 @@
-import { createBrowserRouter, Route } from "react-router";
+import { createBrowserRouter} from "react-router";
 
 import { AuthPage, App } from "@pages/index";
 
@@ -8,6 +8,8 @@ import { RoutePath } from "./routes";
 import OtpForm from "@/features/auth/OtpScreen";
 import EnterEmailForm from "@/features/auth/EnterEmailForm";
 import ResetPasswordForm from "@/features/auth/ResetPasswordForm";
+import PostForm from "@/features/auth/PostForm";
+import ClientHome from "@/features/auth/ClientHomeScreen";
 
 const router = createBrowserRouter([
   {
@@ -24,6 +26,9 @@ const router = createBrowserRouter([
       {path: RoutePath.OTP, Component: OtpForm},
       {path: RoutePath.ENTER_EMAIL, Component: EnterEmailForm},
       {path: RoutePath.RESET_PASSWORD, Component: ResetPasswordForm},
+      {path: RoutePath.CREATE_POST, Component: PostForm},
+      {path: RoutePath.CLIENT_HOME, Component: ClientHome},
+      
     ],
   },
 ]);
