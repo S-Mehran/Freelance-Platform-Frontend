@@ -1,0 +1,107 @@
+:root{
+  /* Color palette */
+  --bg: #1a2332; /* lightened navy */
+  --card: #0b1220;
+  --muted: #94a3b8;
+  --text: #e6eef8;
+  --accent: #7c3aed; /* purple */
+  --accent-2: #fb923c; /* orange */
+  --danger: #ff6b6b;
+
+  /* Typography */
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  --radius: 10px;
+  --container-max: 1100px;
+
+  /* spacing scale */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 16px;
+  --space-4: 24px;
+  --space-5: 40px;
+}
+
+/* Reset + base */
+*{box-sizing:border-box}
+html,body,#root{height:100%}
+body{
+  margin:0;
+  font-family:var(--font-sans);
+  background:linear-gradient(180deg,#0f1824 0%, var(--bg) 60%);
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  line-height:1.4;
+}
+
+/* App container */
+.app-container{
+  max-width:var(--container-max);
+  margin:0 auto;
+  padding:var(--space-4);
+}
+
+/* Headings */
+h1,h2,h3,h4{color:var(--text);margin:0 0 var(--space-3) 0}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:0.5rem 0.9rem;border-radius:8px;border:0;cursor:pointer;font-weight:600}
+.btn-primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#ffffff}
+.btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.08);color:var(--text)}
+
+/* Form controls (overrides for bootstrap classes) */
+.form-label{color:var(--muted);display:block;margin-bottom:6px;font-size:0.9rem}
+.form-control{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);color:var(--text);padding:10px 12px;border-radius:8px}
+.form-control:focus{outline:none;box-shadow:0 0 0 6px rgba(124,58,237,0.14);border-color:var(--accent)}
+.form-control::placeholder{color:rgba(255,255,255,0.45)}
+
+/* Input-field helper: some pages use custom wrappers */
+.input-field input, .input-field .form-control{background:rgba(255,255,255,0.02);color:var(--text);border-radius:8px}
+.input-field{width:100%}
+
+/* Card */
+.app-card{background:linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));border-radius:var(--radius);padding:var(--space-3);box-shadow:0 8px 22px rgba(2,6,23,0.7);transition:transform .14s ease,box-shadow .14s ease;border:1px solid rgba(124,58,237,0.12)}
+.app-card:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(2,6,23,0.8)}
+.app-card-title{font-size:1.05rem;margin-bottom:6px}
+.app-card-subtitle{color:var(--muted);font-size:0.9rem}
+
+/* Bootstrap overrides for dark theme */
+.card, .card-body, .card-footer{background:transparent;border:0}
+.card .card-title, .card-title{color:var(--text)}
+.app-card-title{color:var(--text)}
+
+/* Card header/footer defaults for consistent contrast */
+.card-header{background:transparent;color:var(--text);border-bottom:1px solid rgba(255,255,255,0.03)}
+.card-footer{background:transparent;color:var(--text)}
+
+/* Utility text color mappings to fit dark bg */
+.text-primary{color:var(--accent) !important}
+.text-secondary{color:var(--muted) !important}
+.text-muted{color:rgba(255,255,255,0.6) !important}
+
+/* Badges: replace light backgrounds that disappear on white pages */
+.badge.bg-light{background:rgba(255,255,255,0.08) !important;color:var(--text) !important}
+.badge.bg-secondary{background:rgba(255,255,255,0.06) !important;color:var(--text) !important}
+
+/* Navbar adjustments */
+.app-header{background:linear-gradient(180deg, rgba(124,58,237,0.06), rgba(0,0,0,0.14));padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.03)}
+.app-header .navbar-brand, .app-header .nav-link{color:rgba(255,255,255,0.75) !important}
+.app-header .nav-link:hover, .app-header .nav-link:focus{color:var(--accent) !important}
+
+/* Override common Bootstrap background/text utilities for dark theme */
+.bg-light{background-color:rgba(255,255,255,0.02) !important;color:var(--text) !important}
+.bg-white{background-color:rgba(255,255,255,0.03) !important;color:var(--text) !important}
+.text-dark{color:var(--text) !important}
+
+
+/* Utilities */
+.row{display:flex;gap:var(--space-3);align-items:flex-start}
+.col{flex:1}
+.center{display:flex;align-items:center;justify-content:center}
+.spaced{margin-top:var(--space-3)}
+
+/* Small responsive tweaks */
+@media (max-width:720px){
+  .row{flex-direction:column}
+  .app-container{padding:var(--space-3)}
+}

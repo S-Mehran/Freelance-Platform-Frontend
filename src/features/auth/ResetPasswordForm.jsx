@@ -6,7 +6,7 @@ import useAxios from "@/hooks/useAxios";
 import { useNavigate, useLocation } from "react-router";
 import CustomInput from "@components/CustomInput";
 import { useEffect } from "react";
-
+import Swal from "sweetalert2";
 
 const ResetPasswordForm = () => {
 
@@ -16,13 +16,23 @@ const ResetPasswordForm = () => {
 
     const user = state.user
 
-    const {fetchData, response} = useAxios()
+    const {fetchData, response, error} = useAxios()
 
     useEffect(()=> {
         if (response) {
             navigate(RoutePath.HOME+RoutePath.AUTH+"/"+RoutePath.LOGIN)
         }
     }, [navigate, response])
+
+  useEffect(()=> {
+    if (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: error
+      })
+    }
+  }, [error])
 
 
     const validationSchema = Yup.object({
@@ -54,7 +64,7 @@ const ResetPasswordForm = () => {
             value={formik.values.email}
             onChange={formik.handleChange}
             isInvalid={!!formik.errors.email}
-            validationMsg={formik.errors.email as string|| ""}
+            validationMsg={formik.errors.email || ""}
           />
           <CustomInput
             name="newPassword"

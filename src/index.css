@@ -1,0 +1,4 @@
+@import './styles/theme.css';
+
+/* Root app wrapper used by App.jsx */
+.app-root{min-height:100vh;display:flex;flex-direction:column}

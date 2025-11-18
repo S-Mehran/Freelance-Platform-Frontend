@@ -3,13 +3,13 @@ import React from "react";
 const InfoCard = (props) => {
   return (
     <div
-      className="card"
+      className="app-card"
       onClick={() => {
         props.handleChange(props.id);
       }}
     >
-      <h3 className="title">{props.title}</h3>
-      <p className="sub-title">{props.subtitle}</p>
+      <h3 className="app-card-title">{props.title}</h3>
+      <p className="app-card-subtitle">{props.subtitle}</p>
     </div>
   );
 };

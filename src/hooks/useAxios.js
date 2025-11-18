@@ -1,24 +1,26 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-type RequestData = {
-  url: string;
-  method: string;
-  data?: object;
-  params?: object;
-};
+// type RequestData = {
+//   url: string;
+//   method: string;
+//   data?: object;
+//   params?: object;
+// };
 
 // Custom hook for API calls with request cancellation and interceptors
 const useAxios = () => {
   const [response, setResponse] = useState(null);
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+
 
   // Create an Axios instance
   const axiosInstance = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL,
     withCredentials: true,
   });
+axiosInstance.defaults.withCredentials = true;
 
   // Set up request and response interceptors
   axiosInstance.interceptors.request.use(
@@ -60,7 +62,7 @@ const useAxios = () => {
     method,
     data = {},
     params = {},
-  }: RequestData) => {
+  }) => {
     setLoading(true);
     try {
       const result = await axiosInstance({

@@ -1,4 +1,4 @@
 import App from "../App";
-import AuthPage from "../pages/AuthPage";
+import AuthPage from "./AuthPage";
 
 export { AuthPage, App };

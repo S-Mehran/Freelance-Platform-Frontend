@@ -5,6 +5,7 @@ import * as Yup from "yup"
 import { useNavigate, useLocation } from "react-router";
 import { RoutePath } from "@/routes/routes";
 import { useEffect } from "react";
+import Swal from "sweetalert2";
 
 const OtpForm = () => {
   const navigate = useNavigate()
@@ -29,6 +30,24 @@ const OtpForm = () => {
 },  
   [registerApi.response, resetPasswordApi.response, navigate])
 
+  useEffect(()=> {
+    if (registerApi.error) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: registerApi.error
+      })
+    }
+
+      if (resetPasswordApi.error) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: resetPasswordApi.error
+      })
+    }
+  }, [registerApi.error, resetPasswordApi.error]
+)
 
   const validationSchema = Yup.object({
     otp: Yup.string().max(6).required('OTP Required'),

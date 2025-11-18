@@ -1,19 +1,19 @@
 import { Form } from "react-bootstrap";
 
-type CustomInputProps = {
-  label?: string;
-  value: string;
-  onChange: (value: React.ChangeEvent<HTMLInputElement>) => void;
-  placeholder?: string;
-  type?: string;
-  name: string;
-  as?:"input"|"textarea"|"select";
-  options?: {value: string; label: string}[]
-  isInvalid?: boolean;
-  validationMsg?: string;
-};
+// type CustomInputProps = {
+//   label?: string;
+//   value: string;
+//   onChange: (value: React.ChangeEvent<HTMLInputElement>) => void;
+//   placeholder?: string;
+//   type?: string;
+//   name: string;
+//   as?:"input"|"textarea"|"select";
+//   options?: {value: string; label: string}[]
+//   isInvalid?: boolean;
+//   validationMsg?: string;
+// };
 
-const CustomInput = (props: CustomInputProps) => {
+const CustomInput = (props) => {
   const {
     type,
     name,
@@ -27,14 +27,13 @@ const CustomInput = (props: CustomInputProps) => {
     validationMsg,
   } = props;
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e) => {
     onChange(e);
   };
 
   return (
-    <Form.Group className="mb-3" controlId={name}>
-      {label && <Form.Label>{label}</Form.Label>}
-
+    <Form.Group className="mb-3 spaced" controlId={name}>
+      {label && <Form.Label className="form-label">{label}</Form.Label>}
       {as === "select" ? (
         <Form.Control
           as="select"
@@ -42,6 +41,7 @@ const CustomInput = (props: CustomInputProps) => {
           value={value}
           onChange={handleChange}
           isInvalid={isInvalid}
+          className="form-control"
         >
           {options.map((opt) => (
             <option key={opt.value} value={opt.value}>
@@ -58,6 +58,7 @@ const CustomInput = (props: CustomInputProps) => {
           value={value}
           onChange={handleChange}
           isInvalid={isInvalid}
+          className="form-control"
         />
       )}
       <Form.Control.Feedback type="invalid">

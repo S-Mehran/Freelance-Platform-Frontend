@@ -1,8 +1,12 @@
+import { useAuth } from "@/context/AuthContext";
 import { Container, Row, Col } from "react-bootstrap";
-import { Outlet } from "react-router";
+import { Navigate, Outlet } from "react-router";
 
 const AuthPage = () => {
-  return (
+  const { user, isAuthenticated } = useAuth();
+  return isAuthenticated ? (
+    <Navigate to={user.role === "client" ? "/client" : "/freelancer"} replace />
+  ) : (
     <Container
       fluid
       className="vh-100 d-flex justify-content-center align-items-center bg-light"
