@@ -19,7 +19,7 @@ const ClientNavbar = () => {
             <Nav.Link as={Link} to="/client/get-posts">
               See Posts
             </Nav.Link>
-            <Nav.Link as={Link} to="/client/home">
+            <Nav.Link as={Link} to="/client">
               Dashboard
             </Nav.Link>
             <Nav.Link as={Link} to="/client/create-job">
@@ -28,7 +28,7 @@ const ClientNavbar = () => {
             <Nav.Link as={Link} to={`/client/${RoutePath.GET_MY_POSTS}`}>
               My Jobs
             </Nav.Link>
-            <Nav.Link as={Link} to="/client/messages">
+            <Nav.Link as={Link} to="/client">
               Messages
             </Nav.Link>
           </Nav>

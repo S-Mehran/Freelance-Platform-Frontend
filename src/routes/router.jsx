@@ -21,6 +21,13 @@ import SinglePagePost from "../pages/SinglePagePost";
 import SingleMyPostPage from "../pages/Client/PrivateSinglePage";
 import EditPostForm from "../pages/Client/EditPostForm";
 import ClientProfile from "../pages/Client/ClientProfile";
+import ProposalForm from "../pages/Freelancer/ProposalForm";
+import SinglePagePostFreelancer from "../pages/Freelancer/SinglePagePost";
+import ClientPostsFreelancer from "../pages/Freelancer/AllClientPosts";
+import { MyFreelancerProposals } from "../pages/Freelancer/AllFreelancerProposals";
+import { PostProposals } from "../pages/Client/PostProposals";
+import { ProposalDetail } from "../pages/Client/SingleProposalPage";
+import { CreateContractForm } from "../pages/Client/ContractForm";
 
 const router = createBrowserRouter([
   {
@@ -58,8 +65,12 @@ const router = createBrowserRouter([
       {path: RoutePath.GET_MY_POSTS, element: <MyClientPosts/>},
       {path: RoutePath.GET_POSTS, element: <ClientPosts/>},        
       {path:  `${RoutePath.SINGLE_POST}/:id`, element:<SinglePagePost/>},
+      {path:  `${RoutePath.GET_PROPOSALS_BY_POST}/:id`, element:<PostProposals/>},
       {path:  `${RoutePath.MY_POST}/:id`, element:<SingleMyPostPage/>},
       {path:  `${RoutePath.EDIT_POST}/:id`, element:<EditPostForm/>},
+      {path:  `${RoutePath.GET_PROPOSALS_BY_POST}/:id`, element:<PostProposals/>},
+      {path: `${RoutePath.SINGE_PROPOSAL}/:id`, element: <ProposalDetail userRole="CLIENT"/>},
+      {path: `${RoutePath.CREATE_CONTRACT}`, element: <CreateContractForm/>},
       {path: "profile", element: <ClientProfile/>},
       
   
@@ -78,10 +89,12 @@ const router = createBrowserRouter([
 
     children: [
       { index: true, element: <ClientPosts/> },
-      {path: RoutePath.CREATE_POST, element: <PostForm/>},
       {path: RoutePath.LOGOUT, element: <Logout/>},
-      {path: RoutePath.GET_POSTS, element: <ClientPosts/>},
-      
+      {path: RoutePath.GET_POSTS, element: <ClientPostsFreelancer/>},
+      {path: `${RoutePath.SINGLE_POST}/:id`, element: <SinglePagePostFreelancer/>},
+      {path: RoutePath.SEND_PROPOSAL, element: <ProposalForm/>},
+      {path: RoutePath.GET_MY_PROPOSALS, element: <MyFreelancerProposals/>},
+      {path: RoutePath.MY_PROPOSAL, element: <ProposalDetail userRole="FREELANCER" />}
     ]
 
   },

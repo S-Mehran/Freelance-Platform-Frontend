@@ -4,11 +4,11 @@ import { Container, Row, Col, Card, Spinner, Badge, Button } from "react-bootstr
 import { FaArrowLeft, FaDollarSign, FaClock, FaTools } from "react-icons/fa";
 import useAxios from "@/hooks/useAxios";
 import Swal from "sweetalert2";
-import { RoutePath } from "../routes/routes";
+import { RoutePath } from "../../routes/routes";
 import { useNavigate } from "react-router";
 
 
-const SinglePagePost = () => {
+const SinglePagePostFreelancer = () => {
     const {id} = useParams()
 
     const navigate = useNavigate()
@@ -52,7 +52,7 @@ const SinglePagePost = () => {
       <Button
         variant="outline-primary"
         className="mb-4 d-flex align-items-center gap-2"
-        onClick={() => navigate(`/${RoutePath.CLIENT}/${RoutePath.GET_POSTS}`)}
+        onClick={() => navigate(`/${RoutePath.FREELANCER}/${RoutePath.GET_POSTS}`)}
       >
         <FaArrowLeft /> Back to Posts
       </Button>
@@ -126,9 +126,11 @@ const SinglePagePost = () => {
             </div>
           )}
         </Card.Body>
-
+          <Button variant="primary" onClick={() => navigate(`/${RoutePath.FREELANCER}/${RoutePath.SEND_PROPOSAL}`)}>
+            Send Proposal
+          </Button>
         <Card.Footer className="bg-transparent border-0 text-end">
-          <Button variant="primary" onClick={() => navigate(`/${RoutePath.CLIENT}/${RoutePath.GET_POSTS}`)}>
+          <Button variant="primary" onClick={() => navigate(`/${RoutePath.FREELANCER}/${RoutePath.GET_POSTS}`)}>
             Go Back
           </Button>
         </Card.Footer>
@@ -139,4 +141,4 @@ const SinglePagePost = () => {
 }
 
 
-export default SinglePagePost
+export default SinglePagePostFreelancer

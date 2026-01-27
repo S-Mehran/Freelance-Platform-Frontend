@@ -16,6 +16,13 @@ export const RoutePath = {
   SINGLE_POST: "single-post",
   MY_POST: "my-post",
   EDIT_POST: "edit-post",
+  SEND_PROPOSAL: "send-proposal",
+  GET_MY_PROPOSALS: "get-my-proposals",
+  GET_PROPOSALS_BY_POST: "get-post-proposals",
+  MY_PROPOSAL: "my-proposal",
+  CREATE_CONTRACT: "create-contract",
+  SINGE_PROPOSAL: "single-proposal",
+  GET_MY_CONTRACTS: "get-my-contracts",
 };
 
 //export type RoutePath = (typeof RoutePath)[keyof typeof RoutePath];

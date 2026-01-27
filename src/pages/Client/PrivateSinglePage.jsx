@@ -5,6 +5,7 @@ import { FaArrowLeft, FaEdit, FaTrash, FaDollarSign, FaClock, FaTools } from "re
 import useAxios from "@/hooks/useAxios";
 import Swal from "sweetalert2";
 import { RoutePath } from "../../routes/routes";
+import { Outlet } from "react-router";
 
 const SingleMyPostPage = () => {
   const { id } = useParams();
@@ -168,7 +169,14 @@ const SingleMyPostPage = () => {
         </Card.Body>
 
         <Card.Footer className="bg-transparent border-0 text-end">
-          <Button variant="primary" onClick={() => navigate(`/${RoutePath.CLIENT}/${RoutePath.GET_MY_POSTS}`)}>
+                    <Button
+                      variant="outline-light"
+                      onClick={() => navigate(`/${RoutePath.CLIENT}/${RoutePath.GET_PROPOSALS_BY_POST}/${id}`)}
+                      className="gap-2"
+                    >
+                      See Proposals
+                    </Button>
+          <Button variant="primary" onClick={() => navigate(`/${RoutePath.CLIENT}/${RoutePath.GET_MY_POSTS}`, {state: {post: post.title}})}>
             Go Back
           </Button>
         </Card.Footer>

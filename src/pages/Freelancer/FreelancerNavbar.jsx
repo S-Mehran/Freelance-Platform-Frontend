@@ -1,5 +1,6 @@
 import { Navbar, Nav, Container, Button } from "react-bootstrap";
 import { Link } from "react-router";
+import { RoutePath } from "../../routes/routes";
 
 const FreelancerNavbar = () => {
   return (
@@ -17,10 +18,10 @@ const FreelancerNavbar = () => {
             <Nav.Link as={Link} to="/freelancer/home">
               Dashboard
             </Nav.Link>
-            <Nav.Link as={Link} to="/freelancer/jobs">
+            <Nav.Link as={Link} to={`/${RoutePath.FREELANCER}/${RoutePath.GET_POSTS}`}>
               Browse Jobs
             </Nav.Link>
-            <Nav.Link as={Link} to="/freelancer/my-proposals">
+            <Nav.Link as={Link} to={`/${RoutePath.FREELANCER}/${RoutePath.GET_MY_PROPOSALS}`}>
               My Proposals
             </Nav.Link>
             <Nav.Link as={Link} to="/freelancer/contracts">

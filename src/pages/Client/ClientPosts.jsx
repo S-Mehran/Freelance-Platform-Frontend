@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import useAxios from "../../hooks/useAxios";
 import Swal from "sweetalert2";
 import { useState } from "react";
-import { Card, Container, Row, Col, Spinner, Pagination } from "react-bootstrap";
+import { Card, Container, Row, Col, Spinner, Pagination, Button } from "react-bootstrap";
 import { useNavigate } from "react-router";
 import { RoutePath } from "../../routes/routes";
 
@@ -37,7 +37,7 @@ export const MyClientPosts = () => {
 
     return (
     <Container className="app-container page">
-      <h2 className="text-center fw-bold mb-4">Job Posts</h2>
+      <h2 className="text-center fw-bold mb-4">Your Posts</h2>
 
       {!response && (
         <div className="text-center mt-5">
@@ -74,6 +74,8 @@ export const MyClientPosts = () => {
                       <span key={i} className="badge bg-secondary text-white px-3 py-2 rounded-pill">{skill}</span>
                     ))}
                   </div>
+
+
                 </Card.Footer>
               )}
             </Card>
