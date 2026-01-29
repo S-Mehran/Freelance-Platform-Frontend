@@ -16,7 +16,7 @@ import {
 } from "react-bootstrap";
 import { RoutePath } from "../../routes/routes";
 
-export const ProposalDetail = ({ userRole }) => {
+export const ProposalDetailClient = ({ userRole }) => {
   const { id } = useParams();
   const { response, error, loading, fetchData } = useAxios();
   const [proposal, setProposal] = useState(null);

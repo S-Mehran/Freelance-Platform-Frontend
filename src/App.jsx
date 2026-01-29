@@ -3,6 +3,8 @@ import { useAuth } from "./context/AuthContext";
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
 import { RoutePath } from "./routes/routes";
+import './App.css'
+
 const App = () => {
   const { count, increment, decrement, reset } = useCounter();
   const {user, isAuthenticated, loading} = useAuth()

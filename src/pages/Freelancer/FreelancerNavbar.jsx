@@ -24,7 +24,7 @@ const FreelancerNavbar = () => {
             <Nav.Link as={Link} to={`/${RoutePath.FREELANCER}/${RoutePath.GET_MY_PROPOSALS}`}>
               My Proposals
             </Nav.Link>
-            <Nav.Link as={Link} to="/freelancer/contracts">
+            <Nav.Link as={Link} to={`/${RoutePath.FREELANCER}/${RoutePath.GET_MY_CONTRACTS}`}>
               Contracts
             </Nav.Link>
           </Nav>

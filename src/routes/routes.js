@@ -23,6 +23,7 @@ export const RoutePath = {
   CREATE_CONTRACT: "create-contract",
   SINGE_PROPOSAL: "single-proposal",
   GET_MY_CONTRACTS: "get-my-contracts",
+  CONTRACT: "contract"
 };
 
 //export type RoutePath = (typeof RoutePath)[keyof typeof RoutePath];

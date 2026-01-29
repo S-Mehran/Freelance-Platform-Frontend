@@ -38,6 +38,7 @@ const SinglePagePostFreelancer = () => {
 
 
     if (!post) {
+      
     return (
       <Container className="py-5 text-center">
         <Spinner animation="border" variant="primary" />

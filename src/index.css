@@ -2,3 +2,44 @@
 
 /* Root app wrapper used by App.jsx */
 .app-root{min-height:100vh;display:flex;flex-direction:column}
+
+
+
+/* styles/custom-tabs.css */
+.custom-tabs .nav-link {
+  color: var(--muted);
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  margin-right: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.custom-tabs .nav-link:hover {
+  color: var(--text-light);
+  background-color: rgba(124, 58, 237, 0.1);
+  border-color: rgba(124, 58, 237, 0.3);
+}
+
+.custom-tabs .nav-link.active {
+  color: #fff;
+  background-color: #7c3aed;
+  border-color: #7c3aed;
+}
+
+.custom-tabs .nav-link i {
+  font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+  .custom-tabs .nav-link {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+  
+  .custom-tabs .nav-link span {
+    display: flex;
+    align-items: center;
+  }
+}

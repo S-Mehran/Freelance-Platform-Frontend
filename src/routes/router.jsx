@@ -26,8 +26,13 @@ import SinglePagePostFreelancer from "../pages/Freelancer/SinglePagePost";
 import ClientPostsFreelancer from "../pages/Freelancer/AllClientPosts";
 import { MyFreelancerProposals } from "../pages/Freelancer/AllFreelancerProposals";
 import { PostProposals } from "../pages/Client/PostProposals";
-import { ProposalDetail } from "../pages/Client/SingleProposalPage";
+import { ProposalDetailClient } from "../pages/Client/SingleProposalPage";
+import { ProposalDetailFreelancer } from "../pages/Freelancer/SingleProposalPage";
 import { CreateContractForm } from "../pages/Client/ContractForm";
+import { ClientContracts } from "../pages/Client/ContractPage";
+import { FreelancerContracts } from "../pages/Freelancer/ContractPage";
+import { ClientContractDetail } from "../pages/Client/ContractDetailPage";
+import { FreelancerContractDetail } from "../pages/Freelancer/ContractDetailPage";
 
 const router = createBrowserRouter([
   {
@@ -69,10 +74,11 @@ const router = createBrowserRouter([
       {path:  `${RoutePath.MY_POST}/:id`, element:<SingleMyPostPage/>},
       {path:  `${RoutePath.EDIT_POST}/:id`, element:<EditPostForm/>},
       {path:  `${RoutePath.GET_PROPOSALS_BY_POST}/:id`, element:<PostProposals/>},
-      {path: `${RoutePath.SINGE_PROPOSAL}/:id`, element: <ProposalDetail userRole="CLIENT"/>},
+      {path: `${RoutePath.SINGE_PROPOSAL}/:id`, element: <ProposalDetailClient userRole="CLIENT"/>},
       {path: `${RoutePath.CREATE_CONTRACT}`, element: <CreateContractForm/>},
       {path: "profile", element: <ClientProfile/>},
-      
+      {path: `${RoutePath.GET_MY_CONTRACTS}`, element: <ClientContracts/> },
+      {path: `${RoutePath.CONTRACT}/:id`, element: <ClientContractDetail/>}
   
       
     ]
@@ -94,7 +100,9 @@ const router = createBrowserRouter([
       {path: `${RoutePath.SINGLE_POST}/:id`, element: <SinglePagePostFreelancer/>},
       {path: RoutePath.SEND_PROPOSAL, element: <ProposalForm/>},
       {path: RoutePath.GET_MY_PROPOSALS, element: <MyFreelancerProposals/>},
-      {path: RoutePath.MY_PROPOSAL, element: <ProposalDetail userRole="FREELANCER" />}
+      {path: `${RoutePath.MY_PROPOSAL}/:id`, element: <ProposalDetailFreelancer userRole="FREELANCER" />},
+      {path: RoutePath.GET_MY_CONTRACTS, element: <FreelancerContracts/>},
+      {path: `${RoutePath.CONTRACT}/:id`, element: <FreelancerContractDetail/>}
     ]
 
   },

@@ -28,8 +28,8 @@ const ClientNavbar = () => {
             <Nav.Link as={Link} to={`/client/${RoutePath.GET_MY_POSTS}`}>
               My Jobs
             </Nav.Link>
-            <Nav.Link as={Link} to="/client">
-              Messages
+            <Nav.Link as={Link} to={`/${RoutePath.CLIENT}/${RoutePath.GET_MY_CONTRACTS}`}>
+              My Contracts
             </Nav.Link>
           </Nav>
 

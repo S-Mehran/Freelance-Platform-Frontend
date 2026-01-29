@@ -1,0 +1,47 @@
+/* styles/contract.css */
+.contract-document {
+  background: linear-gradient(135deg, rgba(30, 30, 40, 0.95), rgba(20, 20, 30, 0.95));
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.contract-document h1 {
+  color: #7c3aed;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.contract-document h4 {
+  color: #9ca3af;
+  position: relative;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+.contract-document h4::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 60px;
+  height: 3px;
+  background: #7c3aed;
+}
+
+.contract-terms h6 {
+  color: #e5e7eb;
+}
+
+.contract-terms p {
+  color: #d1d5db;
+  line-height: 1.8;
+}
+
+@media print {
+  .contract-document {
+    background: white !important;
+    color: black !important;
+  }
+  
+  button, .modal, .alert {
+    display: none !important;
+  }
+}
