@@ -1,4 +1,4 @@
-// components/proposals/ProposalDetail.jsx
+// components/client/ProposalDetailClient.jsx
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router";
 import useAxios from "../../hooks/useAxios";
@@ -16,77 +16,106 @@ import {
 } from "react-bootstrap";
 import { RoutePath } from "../../routes/routes";
 
-export const ProposalDetailClient = ({ userRole }) => {
+export const ProposalDetailClient = () => {
   const { id } = useParams();
-  const { response, error, loading, fetchData } = useAxios();
-  const [proposal, setProposal] = useState(null);
-  const [showActionModal, setShowActionModal] = useState(false);
-  const [actionType, setActionType] = useState("");
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (userRole === "CLIENT") {
-      fetchData({ url: `get-freelancer-proposal/${id}`, method: "GET" });
-    } else if (userRole === "FREELANCER") {
-      fetchData({ url: `my-proposal/${id}`, method: "GET" });
-    }
-  }, [id, userRole]);
+  // Separate API handlers
+  const fetchProposal = useAxios();
+  const acceptProposal = useAxios();
+  const rejectProposal = useAxios();
 
+  const [proposal, setProposal] = useState(null);
+  const [showActionModal, setShowActionModal] = useState(false);
+  const [actionType, setActionType] = useState(""); // 'accept' or 'reject'
+
+  // Fetch proposal details
   useEffect(() => {
-    if (response) {
-      console.log(response);
-      setProposal(response.proposal);
+    fetchProposal.fetchData({ 
+      url: `get-freelancer-proposal/${id}`, 
+      method: "GET" 
+    });
+  }, [id]);
+
+  // Handle fetch response
+  useEffect(() => {
+    if (fetchProposal.response) {
+      console.log(fetchProposal.response);
+      setProposal(fetchProposal.response.proposal);
     }
 
-    if (error) {
+    if (fetchProposal.error) {
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: error,
+        text: fetchProposal.error,
       });
     }
-  }, [response, error]);
+  }, [fetchProposal.response, fetchProposal.error]);
 
-  const handleStatusChange = (action) => {
+  // Handle accept proposal response
+  useEffect(() => {
+    if (acceptProposal.response) {
+      Swal.fire({
+        icon: "success",
+        title: "Proposal Accepted!",
+        text: "You have successfully accepted this proposal.",
+      });
+      setProposal({ ...proposal, status: "accepted" });
+      showContractCreationPrompt();
+    }
+
+    if (acceptProposal.error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: acceptProposal.error || "Failed to accept proposal",
+      });
+    }
+  }, [acceptProposal.response, acceptProposal.error]);
+
+  // Handle reject proposal response
+  useEffect(() => {
+    if (rejectProposal.response) {
+      Swal.fire({
+        icon: "info",
+        title: "Proposal Rejected",
+        text: "The proposal has been rejected.",
+      });
+      setProposal({ ...proposal, status: "rejected" });
+    }
+
+    if (rejectProposal.error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: rejectProposal.error || "Failed to reject proposal",
+      });
+    }
+  }, [rejectProposal.response, rejectProposal.error]);
+
+  const handleAction = (action) => {
     setActionType(action);
     setShowActionModal(true);
   };
 
-  const confirmStatusChange = async () => {
+  const confirmAction = async () => {
     setShowActionModal(false);
 
-    const statusMap = {
-      accept: "accepted",
-      reject: "rejected",
-      withdraw: "withdrawn",
-    };
-
     try {
-      const result = await fetchData({
-        url: `accept-proposal/${id}`,
-        method: "PUT",
-        data: { status: statusMap[actionType] },
-      });
-
-      if (result) {
-        Swal.fire({
-          icon: "success",
-          title: "Success",
-          text: `Proposal ${actionType}ed successfully!`,
+      if (actionType === "accept") {
+        await acceptProposal.fetchData({
+          url: `accept-proposal/${id}`,
+          method: "PUT",
         });
-
-        setProposal({ ...proposal, status: statusMap[actionType] });
-
-        if (actionType === "accept" && userRole === "CLIENT") {
-          showContractCreationPrompt();
-        }
+      } else if (actionType === "reject") {
+        await rejectProposal.fetchData({
+          url: `reject-proposal/${id}`,
+          method: "PUT",
+        });
       }
     } catch (err) {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Failed to update proposal status",
-      });
+      console.error("Action failed:", err);
     }
   };
 
@@ -129,29 +158,7 @@ export const ProposalDetailClient = ({ userRole }) => {
     return statusColors[status] || "secondary";
   };
 
-  const canAccept = () => {
-    return userRole === "CLIENT" && proposal?.status === "submitted";
-  };
-
-  const canReject = () => {
-    return (
-      userRole === "CLIENT" && ["submitted", "accepted"].includes(proposal?.status)
-    );
-  };
-
-  const canWithdraw = () => {
-    return userRole === "FREELANCER" && proposal?.status === "submitted";
-  };
-
-  const canCreateContract = () => {
-    return (
-      userRole === "CLIENT" &&
-      proposal?.status === "accepted" &&
-      !proposal?.contract
-    );
-  };
-
-  if (loading || !proposal) {
+  if (fetchProposal.loading || !proposal) {
     return (
       <Container className="app-container page">
         <div className="text-center mt-5">
@@ -172,7 +179,7 @@ export const ProposalDetailClient = ({ userRole }) => {
       </div>
 
       {/* Status Alert for Accepted Proposals */}
-      {proposal.status === "accepted" && userRole === "CLIENT" && !proposal.contract && (
+      {proposal.status === "accepted" && !proposal.contract && (
         <Alert variant="success" className="mb-4">
           <Alert.Heading>Proposal Accepted!</Alert.Heading>
           <p>
@@ -196,11 +203,7 @@ export const ProposalDetailClient = ({ userRole }) => {
           <Button
             variant="info"
             onClick={() =>
-              navigate(
-                `/${userRole.toLowerCase()}/${RoutePath.CONTRACT}/${
-                  proposal.contract.id
-                }`
-              )
+              navigate(`/${RoutePath.CLIENT}/${RoutePath.CONTRACT}/${proposal.contract.id}`)
             }
             className="mt-2"
           >
@@ -212,97 +215,6 @@ export const ProposalDetailClient = ({ userRole }) => {
       <Row>
         {/* Main Content */}
         <Col lg={8}>
-          {/* FREELANCER VIEW: Post Information Card */}
-          {userRole === "FREELANCER" && proposal.post && (
-            <Card className="app-card mb-4">
-              <Card.Body>
-                <h5 className="mb-3">
-                  <i className="bi bi-briefcase me-2"></i>
-                  Job Post Details
-                </h5>
-                
-                <div className="mb-3">
-                  <h3 className="app-card-title">{proposal.post.title}</h3>
-                </div>
-
-                {proposal.post.summary && (
-                  <div className="mb-3">
-                    <p className="text-muted mb-0">{proposal.post.summary}</p>
-                  </div>
-                )}
-
-                <Row className="mb-3">
-                  <Col md={6}>
-                    <div className="mb-2">
-                      <strong className="text-light">Budget:</strong>
-                      <span className="ms-2" style={{ color: "var(--accent)" }}>
-                        ${proposal.post.price}
-                      </span>
-                    </div>
-                  </Col>
-                  <Col md={6}>
-                    <div className="mb-2">
-                      <strong className="text-light">Project Type:</strong>
-                      <Badge bg="light" text="dark" className="ms-2">
-                        {proposal.post.projectType?.replace("_", " ")}
-                      </Badge>
-                    </div>
-                  </Col>
-                </Row>
-
-                <div className="mb-3">
-                  <strong className="text-light">Experience Level Required:</strong>
-                  <Badge bg="secondary" className="ms-2">
-                    {proposal.post.levelOfExpertiseRequired?.replace("_", " ")}
-                  </Badge>
-                </div>
-
-                {proposal.post.skillsRequired && proposal.post.skillsRequired.length > 0 && (
-                  <div className="mb-3">
-                    <strong className="text-light d-block mb-2">Skills Required:</strong>
-                    <div className="d-flex flex-wrap gap-2">
-                      {proposal.post.skillsRequired.map((skill, i) => (
-                        <span key={i} className="badge bg-secondary px-3 py-2">
-                          {skill}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* Client Info for Freelancer */}
-                {proposal.post.client && (
-                  <div className="mt-4 pt-3 border-top border-secondary">
-                    <strong className="text-light d-block mb-2">Posted By:</strong>
-                    <div className="d-flex align-items-center gap-3">
-                      <div className="bg-primary rounded-circle d-flex align-items-center justify-content-center" 
-                           style={{ width: "40px", height: "40px" }}>
-                        <i className="bi bi-person-fill text-white fs-5"></i>
-                      </div>
-                      <div>
-                        <p className="mb-0 fw-bold">
-                          {proposal.post.client.user?.name || proposal.post.client.name || "Client"}
-                        </p>
-                        {proposal.post.client.company && (
-                          <small className="text-muted">
-                            {proposal.post.client.company}
-                          </small>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                <div className="mt-3">
-                  <small className="text-muted">
-                    <i className="bi bi-calendar me-1"></i>
-                    Posted on: {new Date(proposal.post.createdAt).toLocaleDateString()}
-                  </small>
-                </div>
-              </Card.Body>
-            </Card>
-          )}
-
           {/* Cover Letter Card */}
           <Card className="app-card mb-4">
             <Card.Body>
@@ -314,10 +226,16 @@ export const ProposalDetailClient = ({ userRole }) => {
                 </Badge>
               </div>
 
+              {/* Post Title */}
+              <div className="mb-4">
+                <h5 className="text-muted mb-1">For Job Post:</h5>
+                <h4>{proposal.post?.title || "Post Title"}</h4>
+              </div>
+
               {/* Cover Letter */}
               <div className="mb-4">
                 <h5 className="mb-3">Cover Letter</h5>
-                <Card className="bg-dark border-secondary">
+                <Card className="border-secondary">
                   <Card.Body>
                     <p style={{ whiteSpace: "pre-wrap", color: "var(--muted)" }}>
                       {proposal.coverLetter}
@@ -330,7 +248,7 @@ export const ProposalDetailClient = ({ userRole }) => {
               {proposal.attachment && (
                 <div className="mb-4">
                   <h5 className="mb-3">Attachment</h5>
-                  <Card className="bg-dark border-secondary">
+                  <Card className="border-secondary">
                     <Card.Body>
                       <div className="d-flex align-items-center gap-3">
                         <i className="bi bi-paperclip fs-4"></i>
@@ -370,8 +288,8 @@ export const ProposalDetailClient = ({ userRole }) => {
 
         {/* Sidebar */}
         <Col lg={4}>
-          {/* CLIENT VIEW: Freelancer Information Card */}
-          {userRole === "CLIENT" && proposal.freelancer && (
+          {/* Freelancer Information Card */}
+          {proposal.freelancer && (
             <Card className="app-card mb-4">
               <Card.Body>
                 <h5 className="mb-3">
@@ -397,7 +315,7 @@ export const ProposalDetailClient = ({ userRole }) => {
                     )}
                   </div>
                   <h5 className="mb-0">
-                    {proposal.freelancer.user?.name || proposal.freelancer.name || "Freelancer"}
+                    {`${proposal.freelancer?.user?.firstName} ${proposal.freelancer?.user?.lastName}` || proposal.freelancer.name || "Freelancer"}
                   </h5>
                   {proposal.freelancer.title && (
                     <p className="text-muted mb-0">{proposal.freelancer.title}</p>
@@ -406,7 +324,7 @@ export const ProposalDetailClient = ({ userRole }) => {
 
                 {/* Contact Information */}
                 {proposal.freelancer.user?.email && (
-                  <div className="mb-3 p-2 bg-dark rounded">
+                  <div className="mb-3 p-2 rounded">
                     <small className="text-muted d-block">Email</small>
                     <p className="mb-0">
                       <i className="bi bi-envelope me-2"></i>
@@ -525,8 +443,8 @@ export const ProposalDetailClient = ({ userRole }) => {
                 </p>
               </div>
 
-              {/* CLIENT VIEW: Show post budget for comparison */}
-              {userRole === "CLIENT" && proposal.post?.price && (
+              {/* Show post budget for comparison */}
+              {proposal.post?.price && (
                 <div className="mt-3 pt-3 border-top border-secondary">
                   <p className="text-muted mb-1">Your Budget</p>
                   <p className="mb-0">${proposal.post.price}</p>
@@ -552,115 +470,83 @@ export const ProposalDetailClient = ({ userRole }) => {
             <Card.Body>
               <h5 className="mb-3">Actions</h5>
 
-              {/* Client Actions */}
-              {userRole === "CLIENT" && (
-                <>
-                  {canAccept() && (
-                    <Button
-                      variant="success"
-                      className="w-100 mb-2"
-                      onClick={() => handleStatusChange("accept")}
-                    >
+              {/* Accept Button - Only for submitted proposals */}
+              {proposal.status === "submitted" && (
+                <Button
+                  variant="success"
+                  className="w-100 mb-2"
+                  onClick={() => handleAction("accept")}
+                  disabled={acceptProposal.loading}
+                >
+                  {acceptProposal.loading ? (
+                    <>
+                      <Spinner as="span" animation="border" size="sm" className="me-2" />
+                      Accepting...
+                    </>
+                  ) : (
+                    <>
                       <i className="bi bi-check-circle me-2"></i>
                       Accept Proposal
-                    </Button>
+                    </>
                   )}
-
-                  {canReject() && (
-                    <Button
-                      variant="danger"
-                      className="w-100 mb-2"
-                      onClick={() => handleStatusChange("reject")}
-                    >
-                      <i className="bi bi-x-circle me-2"></i>
-                      Reject Proposal
-                    </Button>
-                  )}
-
-                  {canCreateContract() && (
-                    <Button
-                      variant="primary"
-                      className="w-100 mb-2"
-                      onClick={navigateToContractCreation}
-                    >
-                      <i className="bi bi-file-earmark-text me-2"></i>
-                      Create Contract
-                    </Button>
-                  )}
-
-                  {proposal.contract && (
-                    <Button
-                      variant="info"
-                      className="w-100 mb-2"
-                      onClick={() =>
-                        navigate(
-                          `/${RoutePath.CLIENT}/${RoutePath.CONTRACT}/${proposal.contract.id}`
-                        )
-                      }
-                    >
-                      <i className="bi bi-eye me-2"></i>
-                      View Contract
-                    </Button>
-                  )}
-                </>
+                </Button>
               )}
 
-              {/* Freelancer Actions */}
-              {userRole === "FREELANCER" && (
-                <>
-                  {canWithdraw() && (
-                    <Button
-                      variant="warning"
-                      className="w-100 mb-2"
-                      onClick={() => handleStatusChange("withdraw")}
-                    >
-                      <i className="bi bi-arrow-counterclockwise me-2"></i>
-                      Withdraw Proposal
-                    </Button>
-                  )}
-
-                  {proposal.status === "accepted" && (
-                    <Alert variant="success" className="mb-0">
-                      <i className="bi bi-check-circle me-2"></i>
-                      Your proposal has been accepted! Wait for the client to create a
-                      contract.
-                    </Alert>
-                  )}
-
-                  {proposal.status === "rejected" && (
-                    <Alert variant="danger" className="mb-0">
+              {/* Reject Button - For submitted or accepted proposals */}
+              {["submitted", "accepted"].includes(proposal.status) && (
+                <Button
+                  variant="danger"
+                  className="w-100 mb-2"
+                  onClick={() => handleAction("reject")}
+                  disabled={rejectProposal.loading}
+                >
+                  {rejectProposal.loading ? (
+                    <>
+                      <Spinner as="span" animation="border" size="sm" className="me-2" />
+                      Rejecting...
+                    </>
+                  ) : (
+                    <>
                       <i className="bi bi-x-circle me-2"></i>
-                      This proposal was rejected.
-                    </Alert>
+                      Reject Proposal
+                    </>
                   )}
+                </Button>
+              )}
 
-                  {proposal.contract && (
-                    <Button
-                      variant="info"
-                      className="w-100 mb-2"
-                      onClick={() =>
-                        navigate(
-                          `/${RoutePath.FREELANCER}/${RoutePath.CONTRACT}/${proposal.contract.id}`
-                        )
-                      }
-                    >
-                      <i className="bi bi-eye me-2"></i>
-                      View Contract
-                    </Button>
-                  )}
-                </>
+              {/* Create Contract Button - Only for accepted proposals without contract */}
+              {proposal.status === "accepted" && !proposal.contract && (
+                <Button
+                  variant="primary"
+                  className="w-100 mb-2"
+                  onClick={navigateToContractCreation}
+                >
+                  <i className="bi bi-file-earmark-text me-2"></i>
+                  Create Contract
+                </Button>
+              )}
+
+              {/* View Contract Button - If contract exists */}
+              {proposal.contract && (
+                <Button
+                  variant="info"
+                  className="w-100 mb-2"
+                  onClick={() =>
+                    navigate(`/${RoutePath.CLIENT}/${RoutePath.CONTRACT}/${proposal.contract.id}`)
+                  }
+                >
+                  <i className="bi bi-eye me-2"></i>
+                  View Contract
+                </Button>
               )}
 
               {/* No actions available */}
-              {!canAccept() &&
-                !canReject() &&
-                !canWithdraw() &&
-                !canCreateContract() &&
-                !proposal.contract && (
-                  <p className="text-muted mb-0 text-center">
-                    No actions available for this proposal.
-                  </p>
-                )}
+              {!["submitted", "accepted"].includes(proposal.status) && !proposal.contract && (
+                <Alert variant="secondary" className="mb-0">
+                  <i className="bi bi-info-circle me-2"></i>
+                  No actions available for this proposal.
+                </Alert>
+              )}
             </Card.Body>
           </Card>
         </Col>
@@ -672,12 +558,12 @@ export const ProposalDetailClient = ({ userRole }) => {
         onHide={() => setShowActionModal(false)}
         centered
       >
-        <Modal.Header closeButton className="bg-dark text-light border-secondary">
+        <Modal.Header closeButton className="text-light border-secondary">
           <Modal.Title>
             Confirm {actionType.charAt(0).toUpperCase() + actionType.slice(1)}
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body className="bg-dark text-light">
+        <Modal.Body className="text-light">
           {actionType === "accept" && (
             <p>
               Are you sure you want to accept this proposal? You'll be able to create
@@ -690,26 +576,14 @@ export const ProposalDetailClient = ({ userRole }) => {
               undone.
             </p>
           )}
-          {actionType === "withdraw" && (
-            <p>
-              Are you sure you want to withdraw this proposal? You won't be able to
-              resubmit it.
-            </p>
-          )}
         </Modal.Body>
-        <Modal.Footer className="bg-dark border-secondary">
+        <Modal.Footer className="border-secondary">
           <Button variant="secondary" onClick={() => setShowActionModal(false)}>
             Cancel
           </Button>
           <Button
-            variant={
-              actionType === "accept"
-                ? "success"
-                : actionType === "reject"
-                ? "danger"
-                : "warning"
-            }
-            onClick={confirmStatusChange}
+            variant={actionType === "accept" ? "success" : "danger"}
+            onClick={confirmAction}
           >
             Confirm {actionType.charAt(0).toUpperCase() + actionType.slice(1)}
           </Button>

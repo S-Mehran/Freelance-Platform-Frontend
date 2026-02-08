@@ -77,14 +77,14 @@ const SinglePagePostFreelancer = () => {
         <Card.Body className="p-4">
           <Row className="mb-4">
             <Col md={8}>
-              <h5 className="fw-semibold mb-2" style={{ color: "#e6eef8" }}>Project Description</h5>
+              <h5 className="fw-semibold mb-2">Project Description</h5>
               <p className="text-secondary" style={{ whiteSpace: "pre-line" }}>
                 {post.summary || "No description provided."}
               </p>
             </Col>
 
             <Col md={4}>
-              <h5 className="fw-semibold mb-2" style={{ color: "#e6eef8" }}>Skills Required</h5>
+              <h5 className="fw-semibold mb-2">Skills Required</h5>
               <div className="d-flex flex-wrap gap-2">
                 {post.skillsRequired?.map((skill, index) => (
                   <Badge
@@ -104,30 +104,30 @@ const SinglePagePostFreelancer = () => {
           <Row>
             <Col md={6} className="mb-3">
               <h6 className="text-muted">Posted On:</h6>
-              <p style={{ color: "#e6eef8" }}>{new Date(post.createdAt).toLocaleDateString()}</p>
+              <p>{new Date(post.createdAt).toLocaleDateString()}</p>
             </Col>
             <Col md={6} className="mb-3">
               <h6 className="text-muted">Deadline / Duration:</h6>
-              <p style={{ color: "#e6eef8" }}>{post.duration || "Not specified"}</p>
+              <p>{post.duration || "Not specified"}</p>
             </Col>
           </Row>
 
           {post.client && (
             <div className="mt-4 p-3 border rounded-3 bg-transparent" style={{borderColor: 'rgba(255,255,255,0.04)'}}>
-              <h5 className="fw-semibold mb-2" style={{ color: "#e6eef8" }}>Client Information</h5>
-              <p className="mb-1" style={{ color: "#e6eef8" }}>
-                <strong>Name:</strong> {post.client.user || post.client.user}
+              <h5 className="fw-semibold mb-2">Client Information</h5>
+              <p className="mb-1">
+                <strong>Name:</strong> {`${post.client?.user?.firstName} ${post.client?.user?.lastName}` || post.client.user}
               </p>
-              <p className="mb-1" style={{ color: "#e6eef8" }}>
-                <strong>Email:</strong> {post.client.user}
+              <p className="mb-1">
+                <strong>Email:</strong> {post.client?.user?.email}
               </p>
-              <p className="mb-0" style={{ color: "#e6eef8" }}>
+              <p className="mb-0">
                 <strong>Rating:</strong> {post.client.rating || "N/A"} / 5
               </p>
             </div>
           )}
         </Card.Body>
-          <Button variant="primary" onClick={() => navigate(`/${RoutePath.FREELANCER}/${RoutePath.SEND_PROPOSAL}`)}>
+          <Button variant="primary" onClick={() => navigate(`/${RoutePath.FREELANCER}/${RoutePath.SEND_PROPOSAL}`, {state: {postId: post.id}})}>
             Send Proposal
           </Button>
         <Card.Footer className="bg-transparent border-0 text-end">

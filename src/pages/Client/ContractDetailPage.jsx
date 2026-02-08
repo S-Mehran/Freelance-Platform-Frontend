@@ -250,7 +250,7 @@ export const ClientContractDetail = () => {
                 <div className="p-3 bg-dark rounded">
                   <h6 className="text-muted mb-2">CLIENT (First Party)</h6>
                   <p className="fw-bold mb-1">
-                    {contract.client?.user?.name || "Client"}
+                    {`${contract.client?.user?.firstName} ${contract.client?.user?.lastName}` || "Client"}
                   </p>
                   {contract.client?.company && (
                     <p className="mb-1">{contract.client.company}</p>
@@ -266,7 +266,7 @@ export const ClientContractDetail = () => {
                 <div className="p-3 bg-dark rounded">
                   <h6 className="text-muted mb-2">FREELANCER (Second Party)</h6>
                   <p className="fw-bold mb-1">
-                    {contract.freelancer?.user?.name || "Freelancer"}
+                    {`${contract.freelancer?.user?.firstName} ${contract.freelancer?.user?.lastName}` || "Freelancer"}
                   </p>
                   {contract.freelancer?.title && (
                     <p className="mb-1">{contract.freelancer.title}</p>
@@ -401,7 +401,7 @@ export const ClientContractDetail = () => {
                 <div className="p-3 bg-dark rounded">
                   <p className="text-muted mb-2">Client</p>
                   <p className="fw-bold mb-2">
-                    {contract.client?.user?.name || "Client"}
+                    {`${contract.client?.user?.firstName} ${contract.client?.user?.lastName}` || "Client"}
                   </p>
                   <div className="border-top border-secondary pt-2">
                     <small className="text-muted">
@@ -415,7 +415,7 @@ export const ClientContractDetail = () => {
                 <div className="p-3 bg-dark rounded">
                   <p className="text-muted mb-2">Freelancer</p>
                   <p className="fw-bold mb-2">
-                    {contract.freelancer?.user?.name || "Freelancer"}
+                    {`${contract.freelancer?.user?.firstName} ${contract.freelancer?.user?.lastName}` || "Freelancer"}
                   </p>
                   <div className="border-top border-secondary pt-2">
                     {contract.status !== "pending" && contract.status !== "rejected" ? (
@@ -530,7 +530,7 @@ export const ClientContractDetail = () => {
 
       {/* Confirmation Modal */}
       <Modal show={showActionModal} onHide={() => setShowActionModal(false)} centered>
-        <Modal.Header closeButton className="bg-dark text-light border-secondary">
+        <Modal.Header closeButton className="text-light border-secondary">
           <Modal.Title>
             Confirm{" "}
             {actionType === "cancel"
@@ -540,7 +540,7 @@ export const ClientContractDetail = () => {
               : "Revision Request"}
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body className="bg-dark text-light">
+        <Modal.Body className="text-light">
           {actionType === "cancel" && (
             <p>
               Are you sure you want to cancel this contract? This action cannot be
@@ -560,7 +560,7 @@ export const ClientContractDetail = () => {
             </p>
           )}
         </Modal.Body>
-        <Modal.Footer className="bg-dark border-secondary">
+        <Modal.Footer className="border-secondary">
           <Button variant="secondary" onClick={() => setShowActionModal(false)}>
             Cancel
           </Button>

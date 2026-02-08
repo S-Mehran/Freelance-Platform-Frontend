@@ -7,7 +7,7 @@ import useAxios from "@/hooks/useAxios";
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
 import Swal from "sweetalert2";
-
+import { useLocation } from "react-router";
 
 //to do retrieve id state from single page when navigating
 //Retrieve it here and send it with post data. 
@@ -15,6 +15,10 @@ const ProposalForm = () => {
   const navigate = useNavigate();
   const { response, fetchData, error, loading } = useAxios();
 
+
+  const location = useLocation()
+
+  const postId = location.state?.postId
   // Success Handler
   useEffect(() => {
     if (response) {
@@ -63,11 +67,15 @@ const ProposalForm = () => {
     //       .map((skill) => skill.trim())
     //       .filter((skill) => skill !== ""),
     //   };
+    const payload = {
+      ...values,
+      postId: postId
+    }
 
       await fetchData({
         url: "/create-proposal",
         method: "POST",
-        data: values,
+        data: payload,
       });
     },
   });

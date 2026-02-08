@@ -436,7 +436,7 @@ export const FreelancerContractDetail = () => {
                 <div className="p-3 bg-dark rounded">
                   <p className="text-muted mb-2">Client</p>
                   <p className="fw-bold mb-2">
-                    {contract.client?.user?.name || "Client"}
+                    {`${contract.client?.user?.firstName} ${contract.client?.user?.lastName}` || "Client"}
                   </p>
                   <div className="border-top border-secondary pt-2">
                     <small className="text-muted">
@@ -450,7 +450,7 @@ export const FreelancerContractDetail = () => {
                 <div className="p-3 bg-dark rounded">
                   <p className="text-muted mb-2">Freelancer</p>
                   <p className="fw-bold mb-2">
-                    {contract.freelancer?.user?.name || "Freelancer"}
+                    {`${contract.freelancer?.user?.firstName} ${contract.freelancer?.user?.lastName}` || "Freelancer"}
                   </p>
                   <div className="border-top border-secondary pt-2">
                     {contract.status !== "pending" && contract.status !== "rejected" ? (
@@ -577,7 +577,7 @@ export const FreelancerContractDetail = () => {
 
       {/* Confirmation Modal */}
       <Modal show={showActionModal} onHide={() => setShowActionModal(false)} centered>
-        <Modal.Header closeButton className="bg-dark text-light border-secondary">
+        <Modal.Header closeButton className="text-light border-secondary">
           <Modal.Title>
             Confirm{" "}
             {actionType === "accept"
@@ -587,7 +587,7 @@ export const FreelancerContractDetail = () => {
               : "Submission"}
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body className="bg-dark text-light">
+        <Modal.Body className="text-light">
           {actionType === "accept" && (
             <p>
               By accepting this contract, you agree to complete the project as
@@ -608,7 +608,7 @@ export const FreelancerContractDetail = () => {
             </p>
           )}
         </Modal.Body>
-        <Modal.Footer className="bg-dark border-secondary">
+        <Modal.Footer className="border-secondary">
           <Button variant="secondary" onClick={() => setShowActionModal(false)}>
             Cancel
           </Button>

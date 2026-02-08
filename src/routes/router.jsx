@@ -74,7 +74,7 @@ const router = createBrowserRouter([
       {path:  `${RoutePath.MY_POST}/:id`, element:<SingleMyPostPage/>},
       {path:  `${RoutePath.EDIT_POST}/:id`, element:<EditPostForm/>},
       {path:  `${RoutePath.GET_PROPOSALS_BY_POST}/:id`, element:<PostProposals/>},
-      {path: `${RoutePath.SINGE_PROPOSAL}/:id`, element: <ProposalDetailClient userRole="CLIENT"/>},
+      {path: `${RoutePath.SINGE_PROPOSAL}/:id`, element: <ProposalDetailClient/>},
       {path: `${RoutePath.CREATE_CONTRACT}`, element: <CreateContractForm/>},
       {path: "profile", element: <ClientProfile/>},
       {path: `${RoutePath.GET_MY_CONTRACTS}`, element: <ClientContracts/> },
@@ -100,7 +100,7 @@ const router = createBrowserRouter([
       {path: `${RoutePath.SINGLE_POST}/:id`, element: <SinglePagePostFreelancer/>},
       {path: RoutePath.SEND_PROPOSAL, element: <ProposalForm/>},
       {path: RoutePath.GET_MY_PROPOSALS, element: <MyFreelancerProposals/>},
-      {path: `${RoutePath.MY_PROPOSAL}/:id`, element: <ProposalDetailFreelancer userRole="FREELANCER" />},
+      {path: `${RoutePath.MY_PROPOSAL}/:id`, element: <ProposalDetailFreelancer/>},
       {path: RoutePath.GET_MY_CONTRACTS, element: <FreelancerContracts/>},
       {path: `${RoutePath.CONTRACT}/:id`, element: <FreelancerContractDetail/>}
     ]
